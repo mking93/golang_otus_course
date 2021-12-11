@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -8,11 +9,13 @@ import (
 )
 
 func Unpack(str string) (string, error) {
+	var err = errors.New("")
 	result := ""
 	strBefore := ""
 	for i := 0; i < len(str); i++ {
 		if (i == 0 || (i+1 < len(str) && isInt(string(str[i+1])))) && isInt(string(str[i])) {
 			result = ""
+			err = errors.New("Invalid string")
 			break
 		} else if isInt(string(str[i])) {
 			v, _ := strconv.Atoi(string(str[i]))
@@ -31,7 +34,7 @@ func Unpack(str string) (string, error) {
 			result += strBefore
 		}
 	}
-	return result, nil
+	return result, err
 }
 
 func main() {
