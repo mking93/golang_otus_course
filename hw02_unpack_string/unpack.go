@@ -10,7 +10,6 @@ import (
 var ErrInvalidString = errors.New("invalid string")
 
 func Unpack(str string) (string, error) {
-
 	result := ""
 	strBefore := ""
 
@@ -19,9 +18,7 @@ func Unpack(str string) (string, error) {
 			result = ""
 			return "", ErrInvalidString
 		}
-
 		v, _ := strconv.Atoi(string(str[i]))
-
 		if isInt(string(str[i])) && v > 0 {
 			if string(str[i-1]) == "\n" {
 				result = result[:len(result)-1]
@@ -30,11 +27,9 @@ func Unpack(str string) (string, error) {
 				result += strings.Repeat(strBefore, v-1)
 			}
 		}
-
 		if isInt(string(str[i])) && v <= 0 {
 			result = result[:len(result)-1]
 		}
-
 		if !isInt(string(str[i])) {
 			strBefore = string(str[i])
 			result += strBefore
