@@ -2,22 +2,24 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"strconv"
 	"strings"
 	"unicode"
 )
 
+var err = errors.New("invalid string")
+
 func Unpack(str string) (string, error) {
-	var err = errors.New("")
+
 	result := ""
 	strBefore := ""
 	for i := 0; i < len(str); i++ {
 		if (i == 0 || (i+1 < len(str) && isInt(string(str[i+1])))) && isInt(string(str[i])) {
 			result = ""
-			err = errors.New("Invalid string")
-			break
-		} else if isInt(string(str[i])) {
+			return "", err
+		}
+
+		if isInt(string(str[i])) {
 			v, _ := strconv.Atoi(string(str[i]))
 			if v > 0 {
 				if string(str[i-1]) == "\n" {
@@ -34,18 +36,7 @@ func Unpack(str string) (string, error) {
 			result += strBefore
 		}
 	}
-	return result, err
-}
-
-func main() {
-	fmt.Println(Unpack("a4bc2d5e"))
-	fmt.Println(Unpack("abcd"))
-	fmt.Println(Unpack("3abc"))
-	fmt.Println(Unpack("45"))
-	fmt.Println(Unpack("aaa10b"))
-	fmt.Println(Unpack("aaa0b"))
-	fmt.Println(Unpack(""))
-	fmt.Println(Unpack("d\n5abc"))
+	return result, nil
 }
 
 func isInt(s string) bool {
