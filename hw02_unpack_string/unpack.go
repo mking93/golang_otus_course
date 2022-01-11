@@ -13,6 +13,7 @@ func Unpack(str string) (string, error) {
 
 	result := ""
 	strBefore := ""
+
 	for i := 0; i < len(str); i++ {
 		if (i == 0 || (i+1 < len(str) && isInt(string(str[i+1])))) && isInt(string(str[i])) {
 			result = ""
@@ -20,8 +21,8 @@ func Unpack(str string) (string, error) {
 		}
 
 		v, _ := strconv.Atoi(string(str[i]))
-		if isInt(string(str[i])) && v > 0 {
 
+		if isInt(string(str[i])) && v > 0 {
 			if string(str[i-1]) == "\n" {
 				result = result[:len(result)-1]
 				result += strings.Repeat("\\n", v)
