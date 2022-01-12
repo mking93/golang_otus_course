@@ -15,7 +15,6 @@ func Unpack(str string) (string, error) {
 
 	for i := 0; i < len(str); i++ {
 		if (i == 0 || (i+1 < len(str) && isInt(string(str[i+1])))) && isInt(string(str[i])) {
-			result = ""
 			return "", ErrInvalidString
 		}
 		v, _ := strconv.Atoi(string(str[i]))
