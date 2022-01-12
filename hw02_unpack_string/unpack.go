@@ -18,10 +18,7 @@ func Unpack(str string) (string, error) {
 			result = ""
 			return "", ErrInvalidString
 		}
-		v, erval := strconv.Atoi(string(str[i]))
-		if erval != nil {
-			return "", ErrInvalidString
-		}
+		v, _ := strconv.Atoi(string(str[i]))
 		if isInt(string(str[i])) && v > 0 {
 			if string(str[i-1]) == "\n" {
 				result = result[:len(result)-1]
