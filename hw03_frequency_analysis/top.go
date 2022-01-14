@@ -19,8 +19,7 @@ type SKV struct {
 var zp = regexp.MustCompile(`[\s!.,?]+`)
 
 func Top10(text string) []string {
-	words := make(map[string]int)
-	words = getCountUniqueWords(text)
+	words := getCountUniqueWords(text)
 	res := getTop10WordsAlphabetically(words)
 	return res
 }
