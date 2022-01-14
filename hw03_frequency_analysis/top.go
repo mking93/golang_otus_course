@@ -1,71 +1,87 @@
 package hw03frequencyanalysis
 
 import (
-	"fmt"
+	"regexp"
 	"sort"
 	"strings"
 )
 
-func Top10(str string) []string {
-	words := strings.Split(str, " ")
+type KV struct {
+	k string
+	v int
+}
 
-	var m map[string]int
-	m = getCountUniqueWords(words)
+type SKV struct {
+	k []string
+	v int
+}
 
-	res := getTop10WordsAlphabetically(m)
-	fmt.Println(res)
+var zp = regexp.MustCompile(`[\s!.,?]+`)
+
+func Top10(text string) []string {
+	words := make(map[string]int)
+	words = getCountUniqueWords(text)
+	res := getTop10WordsAlphabetically(words)
 	return res
 }
 
-func getCountUniqueWords(words []string) map[string]int {
-	var m map[string]int
-	m = make(map[string]int)
-	for i := 0; i < len(words); i++ {
-		if val, ok := m[words[i]]; ok {
-			m[words[i]] = val + 1
-			m[words[i]]++
-		} else {
-			m[words[i]] = 1
+func getCountUniqueWords(text string) map[string]int {
+	words := make(map[string]int)
+	for _, elem := range zp.Split(text, -1) {
+		elem = strings.ToLower(elem)
+		_, found := words[elem]
+		if found {
+			words[elem]++
+		} else if elem != "-" {
+			words[elem] = 1
 		}
 	}
-	return m
+
+	return words
 }
 
 func getTop10WordsAlphabetically(m map[string]int) []string {
-	type kv struct {
-		k string
-		v int
+	words := make([]KV, 0, len(m)*2)
+
+	for key, val := range m {
+		words = append(words, KV{key, val})
 	}
 
-	topByValues := make([]kv, 0, len(m))
-	for k, v := range m {
-		topByValues = append(topByValues, kv{k, v})
+	sort.Slice(words, func(i, j int) bool {
+		return words[i].v > words[j].v
+	})
+
+	wordsByNumberRepetitions := make(map[int][]string)
+
+	for _, val := range words {
+		wordsByNumberRepetitions[val.v] = append(wordsByNumberRepetitions[val.v], val.k)
+	}
+
+	for key := range wordsByNumberRepetitions {
+		sort.Slice(wordsByNumberRepetitions[key], func(i, j int) bool {
+			return wordsByNumberRepetitions[key][i] < wordsByNumberRepetitions[key][j]
+		})
+	}
+
+	topByValues := make([]SKV, 0, len(wordsByNumberRepetitions)*2)
+
+	for key, val := range wordsByNumberRepetitions {
+		topByValues = append(topByValues, SKV{val, key})
 	}
 
 	sort.Slice(topByValues, func(i, j int) bool {
 		return topByValues[i].v > topByValues[j].v
 	})
 
-	count := 0
-	if len(topByValues) > 10 {
-		count = 10
-	} else {
-		count = len(topByValues) - 1
+	top10 := make([]string, 0, 10)
+
+	for _, elem := range topByValues {
+		top10 = append(top10, elem.k...)
 	}
 
-	top10 := make([]kv, 0, count)
-	for k := 0; k < count; k++ {
-		top10 = append(top10, topByValues[k])
+	if len(top10) > 10 {
+		return top10[:10]
 	}
 
-	sort.Slice(top10, func(i, j int) bool {
-		return top10[i].k < top10[j].k
-	})
-
-	top10ByKeys := make([]string, 0, 10)
-	for r := 0; r < len(top10); r++ {
-		top10ByKeys = append(top10ByKeys, top10[r].k)
-	}
-
-	return top10ByKeys
+	return top10[0:0:0]
 }
