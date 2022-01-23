@@ -51,7 +51,8 @@ var japanText = "飛翔(はばた)いたら 戻らないと言って1 目指し�
 	"みつかると知って 振り切るほど 蒼い 蒼い あの空 蒼い 蒼い あの空 " +
 	"蒼い 蒼い あの空"
 var dashText = "- - - -- -- --- -- -- - - "
-var dashWordText = "какой-то очень какойто какойто какой то очень очень-очень очень-очень"
+var dashWordText = "какой-то очень какойто какойто какой то " +
+	"очень очень-очень очень-очень"
 
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
@@ -73,7 +74,8 @@ func TestTop10(t *testing.T) {
 		assert.Subset(t, expected, Top10(englishText))
 	})
 	t.Run("japan words test", func(t *testing.T) {
-		expected := []string{"蒼い", "あの空", "白い", "目指したのは", "飛翔(はばた)いたら", "“悲しみ”はまだ覚えられず", "”切なさ”は今つかみはじめた", "あなたへと抱く", "あの雲", "この感情も"}
+		expected := []string{"蒼い", "あの空", "白い", "目指したのは", "飛翔(はばた)いたら", "“悲しみ”はまだ覚えられず",
+			"”切なさ”は今つかみはじめた", "あなたへと抱く", "あの雲", "この感情も"}
 		assert.Subset(t, expected, Top10(japanText))
 	})
 	t.Run("dash test", func(t *testing.T) {
