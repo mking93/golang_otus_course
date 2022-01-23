@@ -1,9 +1,8 @@
 package hw03frequencyanalysis
 
 import (
+	"github.com/stretchr/testify/assert"
 	"testing"
-
-	"github.com/stretchr/testify/require"
 )
 
 // Change to true if needed.
@@ -43,40 +42,39 @@ var text = `Как видите, он  спускается  по  лестни�
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
 
+var englishText = "cat and dog, one dog,two cats and one man"
+var japanText = "飛翔(はばた)いたら 戻らないと言って1 目指したのは 蒼い 蒼い あの空 “悲しみ”はまだ覚えられず ”切なさ”は今つかみはじめた あなたへと抱く この感情も 今”言葉”に変わっていく 未知なる世界の 遊迷(ゆめ)から目覚めて この羽根を広げ 飛び立つ 飛翔(はばた)いたら 戻らないと言って 目指したのは 白い 白い あの雲 突き抜けたら みつかると知って 振り切るほど 蒼い 蒼い あの空 蒼い 蒼い あの空 蒼い 蒼い あの空"
+var dashText = "- - - -- -- --- -- -- - - "
+var dashWordText = "какой-то очень какойто какойто какой то очень очень-очень очень-очень"
+
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
-		require.Len(t, Top10(""), 0)
+		assert.Len(t, Top10(""), 0)
 	})
 
 	t.Run("positive test", func(t *testing.T) {
 		if taskWithAsteriskIsCompleted {
-			expected := []string{
-				"а",         // 8
-				"он",        // 8
-				"и",         // 6
-				"ты",        // 5
-				"что",       // 5
-				"в",         // 4
-				"его",       // 4
-				"если",      // 4
-				"кристофер", // 4
-				"не",        // 4
-			}
-			require.Equal(t, expected, Top10(text))
+			expected := []string{"он", "а", "и", "что", "ты", "не", "если", "то", "его", "кристофер", "робин", "в"}
+			assert.Subset(t, expected, Top10(text))
 		} else {
-			expected := []string{
-				"он",        // 8
-				"а",         // 6
-				"и",         // 6
-				"ты",        // 5
-				"что",       // 5
-				"-",         // 4
-				"Кристофер", // 4
-				"если",      // 4
-				"не",        // 4
-				"то",        // 4
-			}
-			require.Equal(t, expected, Top10(text))
+			expected := []string{"он", "и", "а", "что", "ты", "не", "если", "-", "то", "Кристофер"}
+			assert.ElementsMatch(t, expected, Top10(text))
 		}
+	})
+
+	t.Run("english words test", func(t *testing.T) {
+		expected := []string{"cat", "and", "dog", "one", "two", "cats", "man"}
+		assert.Subset(t, expected, Top10(englishText))
+	})
+	t.Run("japan words test", func(t *testing.T) {
+		expected := []string{"蒼い", "あの空", "白い", "目指したのは", "飛翔(はばた)いたら", "“悲しみ”はまだ覚えられず", "”切なさ”は今つかみはじめた", "あなたへと抱く", "あの雲", "この感情も"}
+		assert.Subset(t, expected, Top10(japanText))
+	})
+	t.Run("dash test", func(t *testing.T) {
+		assert.Len(t, Top10(dashText), 0)
+	})
+	t.Run("dash word test", func(t *testing.T) {
+		expected := []string{"какой-то", "очень", "очень-очень", "какойто", "какой", "то"}
+		assert.Subset(t, expected, Top10(dashWordText))
 	})
 }

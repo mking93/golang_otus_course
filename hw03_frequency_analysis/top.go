@@ -16,17 +16,15 @@ type SKV struct {
 	v int
 }
 
-var zp = regexp.MustCompile(`[\s!.,?]+`)
+var regCompile = regexp.MustCompile(`[\s!.,?]+`)
 
 func Top10(text string) []string {
-	words := getCountUniqueWords(text)
-	res := getTop10WordsAlphabetically(words)
-	return res
+	return getTop10WordsAlphabetically(getCountUniqueWords(text))
 }
 
 func getCountUniqueWords(text string) map[string]int {
 	words := make(map[string]int)
-	for _, elem := range zp.Split(text, -1) {
+	for _, elem := range regCompile.Split(text, -1) {
 		elem = strings.ToLower(elem)
 		_, found := words[elem]
 		if found {
@@ -40,7 +38,7 @@ func getCountUniqueWords(text string) map[string]int {
 }
 
 func getTop10WordsAlphabetically(m map[string]int) []string {
-	words := make([]KV, 0, len(m)*2)
+	words := make([]KV, 0, len(m))
 
 	for key, val := range m {
 		words = append(words, KV{key, val})
@@ -62,7 +60,7 @@ func getTop10WordsAlphabetically(m map[string]int) []string {
 		})
 	}
 
-	topByValues := make([]SKV, 0, len(wordsByNumberRepetitions)*2)
+	topByValues := make([]SKV, 0, len(wordsByNumberRepetitions))
 
 	for key, val := range wordsByNumberRepetitions {
 		topByValues = append(topByValues, SKV{val, key})
