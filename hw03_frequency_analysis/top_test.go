@@ -42,18 +42,16 @@ var text = `Как видите, он  спускается  по  лестни�
 	иногда,  особенно  когда  папа  дома,  он больше любит тихонько
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
-
 var englishText = "cat and dog, one dog,two cats and one man"
-var japanText = "飛翔(はばた)いたら 戻らないと言って1 目指したのは 蒼い " +
-	"蒼い あの空 “悲しみ”はまだ覚えられず ”切なさ”は今つかみはじめた " +
-	"あなたへと抱く この感情も 今”言葉”に変わっていく 未知なる世界の " +
-	"遊迷(ゆめ)から目覚めて この羽根を広げ 飛び立つ 飛翔(はばた)いたら " +
-	"戻らないと言って 目指したのは 白い 白い あの雲 突き抜けたら " +
-	"みつかると知って 振り切るほど 蒼い 蒼い あの空 蒼い 蒼い あの空 " +
-	"蒼い 蒼い あの空"
+var japanText = `飛翔(はばた)いたら 戻らないと言って1 目指したのは 蒼い 蒼い 
+	あの空 “悲しみ”はまだ覚えられず ”切なさ”は今つかみはじめた あなたへと抱く 
+	この感情も 今”言葉”に変わっていく 未知なる世界の 遊迷(ゆめ)から目覚めて 
+	この羽根を広げ 飛び立つ 飛翔(はばた)いたら 戻らないと言って 目指したのは 
+	白い 白い あの雲 突き抜けたら みつかると知って 振り切るほど 蒼い 蒼い 
+	あの空 蒼い 蒼い あの空 蒼い 蒼い あの空`
 var dashText = "- - - -- -- --- -- -- - - "
-var dashWordText = "какой-то очень какойто какойто какой то " +
-	"очень очень-очень очень-очень"
+var dashWordText = `какой-то очень какойто какойто 
+	какой то очень очень-очень очень-очень`
 
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
@@ -106,6 +104,7 @@ func TestTop10(t *testing.T) {
 		}
 		require.Subset(t, expected, Top10(englishText))
 	})
+
 	t.Run("japan words test", func(t *testing.T) {
 		expected := []string{
 			"蒼い",
@@ -121,9 +120,11 @@ func TestTop10(t *testing.T) {
 		}
 		require.Subset(t, expected, Top10(japanText))
 	})
+
 	t.Run("dash test", func(t *testing.T) {
 		require.Len(t, Top10(dashText), 0)
 	})
+
 	t.Run("dash word test", func(t *testing.T) {
 		expected := []string{
 			"какой-то",
