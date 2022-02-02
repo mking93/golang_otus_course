@@ -16,7 +16,7 @@ type SKV struct {
 	v int
 }
 
-var regCompile = regexp.MustCompile(`[\s!.,?]+`)
+var regCompile = regexp.MustCompile(`[\s!.,-?]+`)
 
 func Top10(text string) []string {
 	return getTop10WordsAlphabetically(getCountUniqueWords(text))
@@ -29,8 +29,6 @@ func getCountUniqueWords(text string) map[string]int {
 		_, found := words[elem]
 		if found {
 			words[elem]++
-		} else if elem != "-" {
-			words[elem] = 1
 		}
 	}
 
