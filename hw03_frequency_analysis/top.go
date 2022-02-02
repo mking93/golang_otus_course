@@ -68,15 +68,11 @@ func getTop10WordsAlphabetically(m map[string]int) []string {
 		return topByValues[i].v > topByValues[j].v
 	})
 
-	top10 := make([]string, 0, 10)
+	top10 := make([]string, len(topByValues))
 
 	for _, elem := range topByValues {
 		top10 = append(top10, elem.k...)
 	}
 
-	if len(top10) > 10 {
-		return top10[:10]
-	}
-
-	return top10[0:0:0]
+	return top10
 }
