@@ -25,9 +25,8 @@ func init() {
 func main() {
 	flag.Parse()
 
-	argsCount := len(os.Args)
-	if argsCount < minArgsCount {
-		log.Fatalf("Expected to have at least 3 arguments, but got %d", argsCount)
+	if len(os.Args) < minArgsCount {
+		log.Fatalf("Expected to have at least 3 arguments, but got %d", len(os.Args))
 	}
 
 	host, port := os.Args[2], os.Args[3]
