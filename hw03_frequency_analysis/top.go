@@ -6,73 +6,56 @@ import (
 	"strings"
 )
 
-type KV struct {
-	k string
-	v int
+type dictionaryItem struct {
+	Key   string
+	Value int
 }
 
-type SKV struct {
-	k []string
-	v int
-}
+const topCounts = 10
 
-var regCompile = regexp.MustCompile(`[\s!.,-?]+`)
+func Top10(input string) []string {
+	re := regexp.MustCompile(`(?i)([^\W_]*([\wа-яА-я]+(-[\wа-яА-я]+)+)*[^\s,\-.!?'"\x60]*)`)
 
-func Top10(text string) []string {
-	return getTop10WordsAlphabetically(getCountUniqueWords(text))
-}
+	dictionary := make(map[string]int)
 
-func getCountUniqueWords(text string) map[string]int {
-	words := make(map[string]int)
-	for _, elem := range regCompile.Split(text, -1) {
-		elem = strings.ToLower(elem)
-		_, found := words[elem]
-		if found {
-			words[elem]++
+	for _, match := range re.FindAllString(input, -1) {
+		index := strings.ToLower(match)
+		count, ok := dictionary[index]
+		if ok {
+			count++
+			dictionary[index] = count
+		}
+		if !ok && index != "" {
+			dictionary[index] = 1
 		}
 	}
 
-	return words
-}
+	dictionarySlice := make([]dictionaryItem, len(dictionary))
 
-func getTop10WordsAlphabetically(m map[string]int) []string {
-	words := make([]KV, 0, len(m))
-
-	for key, val := range m {
-		words = append(words, KV{key, val})
+	i := 0
+	for k, v := range dictionary {
+		dictionarySlice[i] = dictionaryItem{
+			Key:   k,
+			Value: v,
+		}
+		i++
 	}
-
-	sort.Slice(words, func(i, j int) bool {
-		return words[i].v > words[j].v
+	sort.Slice(dictionarySlice, func(i, j int) bool {
+		return dictionarySlice[i].Value > dictionarySlice[j].Value
 	})
 
-	wordsByNumberRepetitions := make(map[int][]string)
-
-	for _, val := range words {
-		wordsByNumberRepetitions[val.v] = append(wordsByNumberRepetitions[val.v], val.k)
+	resultLength := topCounts
+	if length := len(dictionarySlice); length < topCounts {
+		resultLength = length
 	}
 
-	for key := range wordsByNumberRepetitions {
-		sort.Slice(wordsByNumberRepetitions[key], func(i, j int) bool {
-			return wordsByNumberRepetitions[key][i] < wordsByNumberRepetitions[key][j]
-		})
+	dictionarySlice = dictionarySlice[:resultLength]
+
+	res := make([]string, resultLength)
+
+	for i := range res {
+		res[i] = dictionarySlice[i].Key
 	}
 
-	topByValues := make([]SKV, 0, len(wordsByNumberRepetitions))
-
-	for key, val := range wordsByNumberRepetitions {
-		topByValues = append(topByValues, SKV{val, key})
-	}
-
-	sort.Slice(topByValues, func(i, j int) bool {
-		return topByValues[i].v > topByValues[j].v
-	})
-
-	top10 := make([]string, 0, len(topByValues))
-
-	for _, elem := range topByValues {
-		top10 = append(top10, elem.k...)
-	}
-
-	return top10
+	return res
 }

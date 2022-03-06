@@ -44,16 +44,7 @@ var text = `Как видите, он  спускается  по  лестни�
 		В этот вечер...`
 
 var (
-	englishText = "cat and dog, one dog,two cats and one man"
-	japanText   = `飛翔(はばた)いたら 戻らないと言って1 目指したのは 蒼い 蒼い 
-	あの空 “悲しみ”はまだ覚えられず ”切なさ”は今つかみはじめた あなたへと抱く 
-	この感情も 今”言葉”に変わっていく 未知なる世界の 遊迷(ゆめ)から目覚めて 
-	この羽根を広げ 飛び立つ 飛翔(はばた)いたら 戻らないと言って 目指したのは 
-	白い 白い あの雲 突き抜けたら みつかると知って 振り切るほど 蒼い 蒼い 
-	あの空 蒼い 蒼い あの空 蒼い 蒼い あの空`
-)
-
-var (
+	englishText  = "cat and dog, one dog,two cats and one man"
 	dashText     = "- - - -- -- --- -- -- - - "
 	dashWordText = `какой-то очень какойто какойто 
 	какой то очень очень-очень очень-очень`
@@ -109,22 +100,6 @@ func TestTop10(t *testing.T) {
 			"man",
 		}
 		require.Subset(t, expected, Top10(englishText))
-	})
-
-	t.Run("japan words test", func(t *testing.T) {
-		expected := []string{
-			"蒼い",
-			"あの空",
-			"白い",
-			"目指したのは",
-			"飛翔(はばた)いたら",
-			"“悲しみ”はまだ覚えられず",
-			"”切なさ”は今つかみはじめた",
-			"あなたへと抱く",
-			"あの雲",
-			"この感情も",
-		}
-		require.Subset(t, expected, Top10(japanText))
 	})
 
 	t.Run("dash test", func(t *testing.T) {
