@@ -1,4 +1,4 @@
-module github.com/mking93/golang_otus_course/hw03
+module github.com/mking93/golang_otus_course/hw03_freq_analysis
 
 go 1.16
 
